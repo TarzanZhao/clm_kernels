@@ -9,6 +9,7 @@ setup(
             name="clm_kernels._C",
             sources=[
                 "clm_kernels.cu",
+                "ssim.cu",
                 "ext.cpp"
             ],
             extra_compile_args={
