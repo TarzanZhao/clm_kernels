@@ -12,6 +12,7 @@ from clm_kernels._C import (
     send_shs2cpu_grad_buffer_stream_retention,
     fusedssim,
     fusedssim_backward,
+    selective_adam_update,
 )
 
 allowed_padding = ["same", "valid"]
@@ -62,5 +63,6 @@ __all__ = [
     "send_shs2gpu_stream_retention",
     "send_shs2cpu_grad_buffer_stream_retention",
     "fused_ssim",
+    "selective_adam_update",
 ]
 

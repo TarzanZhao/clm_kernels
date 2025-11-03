@@ -1,6 +1,7 @@
 #include <torch/extension.h>
 #include "clm_kernels.h"
 #include "ssim.h"
+#include "adam.h"
 
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
   m.def("set_signal", &SetSignal);
@@ -15,4 +16,6 @@ PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
   // Add SSIM functions
   m.def("fusedssim", &fusedssim);
   m.def("fusedssim_backward", &fusedssim_backward);
+
+  m.def("selective_adam_update", &selective_adam_update);
 }
