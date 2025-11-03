@@ -13,7 +13,9 @@ from clm_kernels._C import (
     fusedssim,
     fusedssim_backward,
     selective_adam_update,
+    compute_sh_bwd_inplace,
 )
+from typing import Optional
 
 allowed_padding = ["same", "valid"]
 
@@ -52,6 +54,28 @@ def fused_ssim(img1, img2, padding="same", train=True):
     map = FusedSSIMMap.apply(C1, C2, img1, img2, padding, train)
     return map.mean()
 
+@torch.no_grad()
+def spherical_harmonics_bwd_inplace(
+    degrees_to_use: int,
+    dirs: torch.Tensor,
+    coeffs: torch.Tensor,
+    v_coeffs: torch.Tensor,
+    v_colors: torch.Tensor,
+    masks: Optional[torch.Tensor] = None,
+) -> torch.Tensor:
+
+    num_bases = coeffs.shape[-2]
+    v_dirs = compute_sh_bwd_inplace(
+        num_bases,
+        degrees_to_use,
+        dirs,
+        coeffs,
+        v_coeffs,
+        masks,
+        v_colors,
+        True,
+    )
+    return v_dirs
 
 __all__ = [
     "set_signal",
@@ -64,5 +88,6 @@ __all__ = [
     "send_shs2cpu_grad_buffer_stream_retention",
     "fused_ssim",
     "selective_adam_update",
+    "spherical_harmonics_bwd_inplace",
 ]
 

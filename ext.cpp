@@ -2,6 +2,7 @@
 #include "clm_kernels.h"
 #include "ssim.h"
 #include "adam.h"
+#include "compute_sh_bwd.h"
 
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
   m.def("set_signal", &SetSignal);
@@ -18,4 +19,6 @@ PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
   m.def("fusedssim_backward", &fusedssim_backward);
 
   m.def("selective_adam_update", &selective_adam_update);
+
+  m.def("compute_sh_bwd_inplace", &compute_sh_bwd_inplace_tensor);
 }
