@@ -11,7 +11,7 @@ glm_path = os.path.join(current_dir, "third_party", "glm")
 
 setup(
     name="clm_kernels",
-    packages=['clm_kernels'],
+    packages=["clm_kernels"],
     ext_modules=[
         CUDAExtension(
             name="clm_kernels._C",
@@ -20,15 +20,11 @@ setup(
                 "ssim.cu",
                 "adam.cu",
                 "compute_sh_bwd.cu",
-                "ext.cpp"
+                "ext.cpp",
             ],
             include_dirs=[glm_path],
-            extra_compile_args={
-                "nvcc": ["-O3"]
-            }
+            extra_compile_args={"nvcc": ["-O3"]},
         )
     ],
-    cmdclass={
-        'build_ext': BuildExtension
-    }
+    cmdclass={"build_ext": BuildExtension},
 )

@@ -19,10 +19,13 @@ from typing import Optional
 
 allowed_padding = ["same", "valid"]
 
+
 class FusedSSIMMap(torch.autograd.Function):
     @staticmethod
     def forward(ctx, C1, C2, img1, img2, padding="same", train=True):
-        ssim_map, dm_dmu1, dm_dsigma1_sq, dm_dsigma12 = fusedssim(C1, C2, img1, img2, train)
+        ssim_map, dm_dmu1, dm_dsigma1_sq, dm_dsigma12 = fusedssim(
+            C1, C2, img1, img2, train
+        )
 
         if padding == "valid":
             ssim_map = ssim_map[:, :, 5:-5, 5:-5]
@@ -42,17 +45,21 @@ class FusedSSIMMap(torch.autograd.Function):
         if padding == "valid":
             dL_dmap = torch.zeros_like(img1)
             dL_dmap[:, :, 5:-5, 5:-5] = opt_grad
-        grad = fusedssim_backward(C1, C2, img1, img2, dL_dmap, dm_dmu1, dm_dsigma1_sq, dm_dsigma12)
+        grad = fusedssim_backward(
+            C1, C2, img1, img2, dL_dmap, dm_dmu1, dm_dsigma1_sq, dm_dsigma12
+        )
         return None, None, grad, None, None, None
 
+
 def fused_ssim(img1, img2, padding="same", train=True):
-    C1 = 0.01 ** 2
-    C2 = 0.03 ** 2
+    C1 = 0.01**2
+    C2 = 0.03**2
 
     assert padding in allowed_padding
 
     map = FusedSSIMMap.apply(C1, C2, img1, img2, padding, train)
     return map.mean()
+
 
 @torch.no_grad()
 def spherical_harmonics_bwd_inplace(
@@ -77,6 +84,7 @@ def spherical_harmonics_bwd_inplace(
     )
     return v_dirs
 
+
 __all__ = [
     "set_signal",
     "compute_cnt_h",
@@ -90,4 +98,3 @@ __all__ = [
     "selective_adam_update",
     "spherical_harmonics_bwd_inplace",
 ]
-
